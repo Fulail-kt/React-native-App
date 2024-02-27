@@ -10,13 +10,21 @@ export default function App() {
   };
 
   const handlePress = () => {
-    setTodo(prev => [...prev, text]);
+    setTodo(prev => [...prev, { text: text, completed: false }]);
     setText('');
   };
 
-  const completed=()=>{
-
+  const todoCompleted = (index) => {
+    const newTodo = [...todo];
+    newTodo[index].completed = true;
+    setTodo(newTodo);
   }
+
+  const todoDelete = (index) => {
+    const newTodo = [...todo];
+    newTodo.splice(index, 1);
+    setTodo(newTodo);
+  };
 
   return (
     <View style={styles.container}>
@@ -26,17 +34,17 @@ export default function App() {
       </View>
       <View>
         {todo.map((item, index) => (
-         <View key={index} style={styles.goal}>
-         <Text style={{width:'80%',overflow:'scroll',padding:4}} >{item}</Text>
-         <View style={{ flexDirection: 'row',backgroundColor:'green',height:'100%', borderRadius:2, padding:3, width:"20%", justifyContent: 'space-around',alignItems:'center'}}>
-           <TouchableOpacity onPress={() => handleButtonClick('O')} style={styles.button}>
-             <Text style={styles.buttonText}>O</Text>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={() => handleButtonClick('X')} style={styles.button}>
-             <Text style={styles.buttonText}>X</Text>
-           </TouchableOpacity>
-         </View>
-       </View>
+          <View key={index} style={styles.goal}>
+            <Text style={{ width: '80%', overflow: 'scroll', padding: 4, textDecorationLine: item.completed ? 'line-through' : 'none' }} >{item?.text}</Text>
+            <View style={{ flexDirection: 'row', backgroundColor: 'green', height: '100%', borderRadius: 2, padding: 3, width: "20%", justifyContent: 'space-around', alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => todoCompleted(index)} style={styles.button}>
+                <Text style={styles.buttonText}>O</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => todoDelete(index)} style={styles.button}>
+                <Text style={styles.buttonText} >X</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         ))}
       </View>
     </View>
@@ -49,8 +57,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100 ,
-    
+    marginTop: 100,
+
   },
   text: {
     borderWidth: 2,
@@ -59,17 +67,17 @@ const styles = StyleSheet.create({
     margin: 3,
     padding: 3
   },
-  goal:{
-    color:'rff',
-    borderRadius:3,
-    backgroundColor:'purple',
-    margin:2,
-    width:"75%",
-    display:"flex",
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-    overflow:'visible'
+  goal: {
+    color: 'rff',
+    borderRadius: 3,
+    backgroundColor: 'purple',
+    margin: 2,
+    width: "75%",
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    overflow: 'visible'
   },
   buttonText: {
     color: 'white',
